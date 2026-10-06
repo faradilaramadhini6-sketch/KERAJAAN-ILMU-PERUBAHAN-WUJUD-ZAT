@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan di Kerajaan Ilmu</title>
+<style>
+:root{--blue:#172554;--blue2:#2563eb;--gold:#fbbf24;--purple:#7c3aed;--green:#16a34a;--red:#dc2626;--cream:#fffaf0;--ink:#172033}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#0f172a,#312e81 55%,#581c87);min-height:100vh}
+button{font:inherit}
+#app{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+.game{width:min(1180px,100%);min-height:680px;border:3px solid rgba(251,191,36,.8);border-radius:28px;overflow:hidden;background:linear-gradient(180deg,#eff6ff,#fff);box-shadow:0 24px 70px rgba(0,0,0,.4);position:relative}
+header{height:76px;background:linear-gradient(90deg,#172554,#312e81);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.brand{font-weight:900;letter-spacing:.5px}.brand small{display:block;font-weight:500;opacity:.8;font-size:11px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:999px;font-weight:800;font-size:13px}
+main{padding:30px;min-height:604px;background:radial-gradient(circle at 15% 20%,rgba(96,165,250,.18),transparent 28%),radial-gradient(circle at 85% 75%,rgba(167,139,250,.18),transparent 30%),linear-gradient(#f8fbff,#fff)}
+.hero{text-align:center;max-width:900px;margin:auto}.hero .emoji{font-size:74px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.15))}
+h1{font-size:clamp(34px,6vw,64px);margin:6px 0;color:#172554;line-height:1.05}h2{font-size:clamp(25px,4vw,40px);margin:0 0 10px;color:#172554}h3{margin:0 0 8px;color:#172554}
+.subtitle{font-size:18px;color:#475569;margin-bottom:26px}.quote{background:white;border:2px solid #fde68a;border-radius:18px;padding:18px;box-shadow:0 8px 25px rgba(15,23,42,.08)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.btn{border:0;border-radius:14px;padding:13px 20px;font-weight:900;cursor:pointer;transition:.15s transform,.15s filter;box-shadow:0 7px 0 rgba(15,23,42,.15);background:#2563eb;color:#fff}.btn:hover{transform:translateY(-2px);filter:brightness(1.07)}.btn:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(15,23,42,.15)}.btn.gold{background:#d97706}.btn.green{background:#16a34a}.btn.red{background:#dc2626}.btn.dark{background:#172554}.btn.light{background:#e2e8f0;color:#172033}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:24px}
+.card{background:rgba(255,255,255,.95);border:2px solid #dbeafe;border-radius:20px;padding:20px;box-shadow:0 10px 28px rgba(15,23,42,.08)}
+.map{position:relative;min-height:205px;cursor:pointer;overflow:hidden}.map.locked{filter:grayscale(.75);opacity:.65;cursor:not-allowed}.map .icon{font-size:48px}.map .lock{position:absolute;right:16px;top:16px;font-size:25px}
+.tag{display:inline-block;padding:5px 9px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font-weight:800;font-size:12px}.tag.done{background:#dcfce7;color:#166534}.tag.lock{background:#e2e8f0;color:#475569}
+.objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:24px}.objective{padding:18px;border-radius:18px;background:white;border:2px solid #e0e7ff;font-weight:700}
+.lesson{max-width:900px;margin:auto}.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:20px 0}.fact{background:white;border-radius:18px;padding:18px;border-left:7px solid #7c3aed;box-shadow:0 7px 20px rgba(15,23,42,.07)}.fact b{display:block;font-size:19px;margin-bottom:6px}
+.question{max-width:850px;margin:auto}.qbox{background:white;border-radius:22px;padding:24px;border:2px solid #c7d2fe;box-shadow:0 12px 32px rgba(15,23,42,.08)}.qnum{color:#4f46e5;font-weight:900}.qtext{font-size:22px;font-weight:850;margin:12px 0 20px}.answers{display:grid;gap:11px}.answer{text-align:left;border:2px solid #dbeafe;background:#f8fafc;color:#172033;border-radius:14px;padding:14px 16px;cursor:pointer;font-weight:750}.answer:hover{background:#eff6ff;border-color:#60a5fa}.answer.correct{background:#dcfce7;border-color:#22c55e}.answer.wrong{background:#fee2e2;border-color:#ef4444}.progress{height:12px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:14px 0}.bar{height:100%;background:linear-gradient(90deg,#2563eb,#7c3aed);transition:.3s;width:0}
+.feedback{margin-top:16px;padding:16px;border-radius:16px;font-weight:800}.feedback.good{background:#dcfce7;color:#166534}.feedback.bad{background:#fee2e2;color:#991b1b}
+.reward{text-align:center;max-width:800px;margin:auto}.badge{font-size:110px;animation:bounce 1s infinite alternate}@keyframes bounce{to{transform:translateY(-8px) rotate(3deg)}}
+.reflection{max-width:850px;margin:auto}.reflection textarea{width:100%;min-height:100px;border:2px solid #cbd5e1;border-radius:14px;padding:13px;font:inherit;margin:8px 0 16px}
+.hidden{display:none!important}.notice{padding:13px 16px;border-radius:14px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:700;margin:14px 0}
+footer{padding:12px;text-align:center;font-size:12px;color:#64748b}
+@media(max-width:700px){#app{padding:0}.game{min-height:100vh;border-radius:0;border-width:0}.stats{max-width:55%;}.brand{font-size:13px}header{padding:0 12px}main{padding:20px 14px}.hero .emoji{font-size:55px}.qtext{font-size:19px}.btn{width:100%}.actions{display:grid}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const maps=[
+{title:"Gerbang Kerajaan Zat",icon:"🏰",goal:"Memahami dasar-dasar wujud zat",badge:"🏅",badgeName:"Lencana Penjelajah Zat",
+facts:[["Padat","Bentuk dan volumenya relatif tetap.","🧊 Es, batu, kayu"],["Cair","Volumenya tetap, bentuk mengikuti wadah.","💧 Air, minyak"],["Gas","Bentuk dan volumenya mengikuti ruang.","☁️ Udara, uap air"],["Ingat!","Zat dapat berwujud padat, cair, atau gas.","✨ Kenali cirinya"]],
+qs:[
+["Sebuah es batu diletakkan di dalam gelas. Wujud zat es batu adalah ...",["Gas","Cair","Padat","Plasma"],2],
+["Air yang berada di dalam gelas memiliki wujud ...",["Padat","Cair","Gas","Plasma"],1],
+["Ketika air dipanaskan hingga mendidih, terbentuk uap air. Uap air termasuk wujud ...",["Padat","Cair","Gas","Kristal"],2],
+["Contoh zat yang berwujud gas adalah ...",["Batu","Air","Udara","Es"],2]]},
+{title:"Hutan Perubahan",icon:"🌲",goal:"Mengidentifikasi perubahan wujud zat",badge:"🏅",badgeName:"Lencana Ahli Perubahan",
+facts:[["Mencair","Padat → cair.","🧊 → 💧"],["Membeku","Cair → padat.","💧 → 🧊"],["Menguap","Cair → gas.","💧 → ☁️"],["Mengembun","Gas → cair.","☁️ → 💧"],["Menyublim","Padat → gas.","🧊 → 💨"]],
+qs:[
+["Perubahan wujud dari es menjadi air disebut ...",["Membeku","Mencair","Mengembun","Menyublim"],1],
+["Air yang dimasukkan ke dalam freezer lama-kelamaan menjadi es. Perubahan tersebut disebut ...",["Menguap","Mengembun","Membeku","Menyublim"],2],
+["Titik-titik air yang muncul pada bagian luar gelas berisi es terjadi karena proses ...",["Mencair","Mengembun","Membeku","Menyublim"],1],
+["Kapur barus yang lama-kelamaan habis merupakan contoh perubahan wujud ...",["Menyublim","Mengembun","Membeku","Mencair"],0]]},
+{title:"Sungai Energi",icon:"🌊",goal:"Memahami hubungan kalor dengan perubahan wujud",badge:"🏅",badgeName:"Lencana Penguasa Energi",
+facts:[["Menyerap kalor","Mencair, menguap, dan menyublim memerlukan kalor.","🔥 → zat"],["Melepaskan kalor","Membeku dan mengembun melepaskan kalor.","zat → 🔥"],["Contoh","Es mencair karena menyerap kalor dari lingkungan.","🧊 + 🔥 → 💧"],["Kunci","Kalor dapat memengaruhi perubahan wujud zat.","⚡"]],
+qs:[
+["Ketika es mencair, es tersebut ...",["Melepaskan kalor","Menyerap kalor","Tidak mengalami perubahan energi","Menghasilkan kalor"],1],
+["Ketika air berubah menjadi es, air ...",["Menyerap kalor","Melepaskan kalor","Menghasilkan cahaya","Tidak mengalami perubahan energi"],1],
+["Air yang dipanaskan hingga menjadi uap mengalami proses ...",["Penguapan dan menyerap kalor","Pembekuan dan melepaskan kalor","Pengembunan dan menyerap kalor","Penyubliman dan melepaskan kalor"],0],
+["Perubahan wujud yang umumnya disertai pelepasan kalor adalah ...",["Mencair","Menguap","Menyublim","Mengembun"],3]]},
+{title:"Gunung Alkimia",icon:"⛰️",goal:"Membedakan perubahan fisika dan kimia",badge:"🏅",badgeName:"Lencana Alkemis Muda",
+facts:[["Perubahan fisika","Tidak menghasilkan zat baru.","🧊 Es mencair"],["Perubahan kimia","Menghasilkan zat baru.","🧲 Besi berkarat"],["Ciri","Sifat zat dapat berubah pada reaksi kimia.","🔥 Kayu terbakar"],["Ingat!","Perubahan wujud umumnya termasuk perubahan fisika.","✨"]],
+qs:[
+["Es yang mencair merupakan contoh ...",["Perubahan kimia","Perubahan fisika","Reaksi kimia","Pembakaran"],1],
+["Besi yang berkarat merupakan contoh ...",["Perubahan fisika","Perubahan kimia","Perubahan wujud","Pelarutan"],1],
+["Kayu yang dibakar hingga menjadi abu merupakan contoh ...",["Perubahan fisika","Perubahan kimia","Mencair","Membeku"],1],
+["Contoh perubahan fisika adalah ...",["Kayu terbakar","Besi berkarat","Es mencair","Makanan membusuk"],2]]},
+{title:"Istana Pengetahuan",icon:"🏯",goal:"Menganalisis penerapan konsep dalam kehidupan sehari-hari",badge:"👑",badgeName:"Mahkota Ahli Perubahan Wujud Zat",
+facts:[["Analisis","Gunakan konsep perubahan wujud untuk menjelaskan kejadian sehari-hari.","🔎"],["Kehidupan","Jemuran kering, embun, dan es mencair adalah contoh nyata.","🌤️"],["Integrasi","Hubungkan wujud zat, perubahan wujud, kalor, dan jenis perubahan.","🧠"],["Misi akhir","Tunjukkan bahwa kamu mampu menerapkan konsep.","👑"]],
+qs:[
+["Pakaian basah yang dijemur menjadi kering karena air mengalami ...",["Membeku","Menguap","Mengembun","Menyublim"],1],
+["Uap air berubah menjadi titik-titik air pada permukaan yang dingin. Perubahan ini disebut ...",["Mencair","Membeku","Mengembun","Menyublim"],2],
+["Pasangan peristiwa yang seluruhnya merupakan perubahan fisika adalah ...",["Es mencair dan air menguap","Kayu terbakar dan besi berkarat","Makanan membusuk dan kayu terbakar","Besi berkarat dan makanan membusuk"],0],
+["Es berubah menjadi air kemudian menjadi uap. Perubahan yang terjadi merupakan ...",["Perubahan fisika","Perubahan kimia","Perubahan fisika dan kimia","Reaksi kimia"],0]]}
+];
+
+let s={screen:"home",map:0,q:0,score:0,xp:0,crystals:0,done:Array(5).fill(false),wrong:false};
+
+function save(){try{localStorage.setItem("kerajaanIlmu",JSON.stringify(s))}catch(e){}}
+function load(){try{let x=JSON.parse(localStorage.getItem("kerajaanIlmu"));if(x&&x.done)s=x}catch(e){}}
+function header(){
+return `<header><div class="brand">🏰 KERAJAAN ILMU<small>Game Edukasi • Kelas 7 SMP</small></div>
+<div class="stats"><span class="pill">💎 ${s.crystals}</span><span class="pill">⭐ ${s.xp} XP</span><span class="pill">🏅 ${s.done.filter(Boolean).length}/5</span></div></header>`;
+}
+function shell(content){document.getElementById("app").innerHTML=`<div class="game">${header()}<main>${content}</main><footer>Petualangan di Kerajaan Ilmu • Perubahan Wujud Zat</footer></div>`}
+function home(){s.screen="home";save();shell(`<section class="hero"><div class="emoji">👑</div><h1>Petualangan di Kerajaan Ilmu</h1><div class="subtitle">Perubahan Wujud Zat • Game Edukasi Interaktif Kelas 7 SMP</div><div class="quote">🧙‍♂️ <b>Selamat datang, Penjelajah!</b><br>Kerajaan Ilmu membutuhkan bantuanmu. Jelajahi 5 wilayah, kuasai 20 tantangan, kumpulkan Kristal Pengetahuan, dan raih Mahkota Ahli Perubahan Wujud Zat.</div><div class="actions"><button class="btn gold" onclick="goObjectives()">🚀 Mulai Petualangan</button><button class="btn light" onclick="help()">📜 Petunjuk</button></div></section>`)}
+function help(){alert("Cara bermain:\\n\\n1. Selesaikan map secara berurutan.\\n2. Pelajari materi sebelum tantangan.\\n3. Jawab 4 soal pada setiap map.\\n4. Jawaban benar mendapat +100 XP dan +1 Kristal.\\n5. Jika salah, pelajari kembali dan coba lagi.\\n6. Selesaikan semua 5 map untuk mendapatkan Mahkota Ahli.")}
+function goObjectives(){s.screen="objectives";save();shell(`<section class="hero"><h2>🎯 Misi yang Harus Kamu Kuasai</h2><div class="objectives">
+<div class="objective">📦 Menjelaskan wujud zat padat, cair, dan gas.</div><div class="objective">🔄 Mengidentifikasi perubahan wujud zat.</div><div class="objective">🔥 Menjelaskan hubungan kalor dengan perubahan wujud.</div><div class="objective">⚗️ Membedakan perubahan fisika dan kimia.</div><div class="objective">🔎 Menganalisis contoh perubahan zat dalam kehidupan sehari-hari.</div></div><div class="actions"><button class="btn gold" onclick="worldMap()">🗺️ Lihat Peta Kerajaan</button></div></section>`)}
+function worldMap(){s.screen="map";save();let cards=maps.map((m,i)=>{let open=i===0||s.done[i-1], status=s.done[i]?"Selesai":open?"Tersedia":"Terkunci";return `<div class="card map ${open?"":"locked"}" onclick="${open?`openMap(${i})`:"lockedMsg()"}"><span class="tag ${s.done[i]?"done":open?"":"lock"}">${status}</span><div class="icon">${m.icon}</div><h3>MAP ${i+1} — ${m.title}</h3><p>${m.goal}</p><div class="lock">${open?(s.done[i]?"✅":"➡️"):"🔒"}</div></div>`}).join("");
+shell(`<section><h2>🗺️ Peta Kerajaan Perubahan Zat</h2><p>Jelajahi wilayah kerajaan secara berurutan. Selesaikan satu map untuk membuka map berikutnya.</p><div class="grid">${cards}</div><div class="actions"><button class="btn light" onclick="home()">🏠 Home</button><button class="btn red" onclick="resetGame()">↻ Reset Game</button></div></section>`)}
+function lockedMsg(){alert("🔒 Map ini masih terkunci. Selesaikan map sebelumnya terlebih dahulu!")}
+function openMap(i){s.map=i;s.q=0;s.wrong=false;lesson()}
+function lesson(){let m=maps[s.map];shell(`<section class="lesson"><span class="tag">MAP ${s.map+1}</span><h2>${m.icon} ${m.title}</h2><p><b>Misi:</b> ${m.goal}</p><div class="facts">${m.facts.map(f=>`<div class="fact"><b>${f[0]}</b>${f[1]}<br><small>${f[2]}</small></div>`).join("")}</div><div class="notice">📖 Pelajari materi ini sebelum memasuki tantangan. Kamu dapat kembali mempelajarinya kapan saja.</div><div class="actions"><button class="btn gold" onclick="question()">⚔️ Mulai Tantangan</button><button class="btn light" onclick="worldMap()">🗺️ Peta</button></div></section>`)}
+function question(){let m=maps[s.map],q=m.qs[s.q];s.screen="question";shell(`<section class="question"><div style="display:flex;justify-content:space-between;gap:10px"><b>MAP ${s.map+1} • ${m.title}</b><b>Soal ${s.q+1}/4</b></div><div class="progress"><div class="bar" style="width:${((s.q)/4)*100}%"></div></div><div class="qbox"><div class="qnum">TANTANGAN ${s.q+1}</div><div class="qtext">${q[0]}</div><div class="answers">${q[1].map((a,i)=>`<button class="answer" onclick="answer(${i})">${String.fromCharCode(65+i)}. ${a}</button>`).join("")}</div></div><div class="actions"><button class="btn light" onclick="lesson()">📖 Pelajari Lagi</button><button class="btn light" onclick="worldMap()">🗺️ Peta</button></div></section>`)}
+function answer(i){let m=maps[s.map],q=m.qs[s.q];document.querySelectorAll(".answer").forEach((b,n)=>{b.disabled=true;if(n===q[2])b.classList.add("correct");if(n===i&&i!==q[2])b.classList.add("wrong")});
+if(i===q[2]){s.score++;s.xp+=100;s.crystals++;s.wrong=false;save();setTimeout(()=>correct(),500)}else{s.wrong=true;save();setTimeout(()=>wrong(),500)}}
+function correct(){let last=s.q===3;shell(`<section class="reward"><div class="badge">🎉</div><h2>SELAMAT! Jawaban kamu benar!</h2><p>+100 XP &nbsp; • &nbsp; +1 💎 Kristal Pengetahuan</p><div class="quote">Kamu semakin dekat dengan gelar <b>Ahli Perubahan Wujud Zat</b>!</div><div class="actions"><button class="btn green" onclick="${last?`mapReward()`:`nextQ()`}">${last?"🎁 Lihat Reward Map":"➡️ Lanjut ke Soal Berikutnya"}</button></div></section>`)}
+function wrong(){shell(`<section class="reward"><div class="badge">🧙</div><h2>Belum tepat!</h2><p>Ayo pelajari lagi konsepnya, lalu coba kembali.</p><div class="notice">💡 Petunjuk: kembali ke materi dan perhatikan hubungan wujud zat, perubahan wujud, kalor, atau jenis perubahan yang sedang ditanyakan.</div><div class="actions"><button class="btn gold" onclick="lesson()">📖 Pelajari Lagi</button><button class="btn red" onclick="question()">🔄 Coba Lagi</button></div></section>`)}
+function nextQ(){s.q++;save();question()}
+function mapReward(){s.done[s.map]=true;save();let last=s.map===4;let m=maps[s.map];shell(`<section class="reward"><div class="badge">${m.badge}</div><span class="tag done">MAP ${s.map+1} SELESAI</span><h2>${m.badgeName}</h2><p>Kamu berhasil menaklukkan <b>${m.title}</b>.</p><div class="quote"><b>Statistik saat ini</b><br>⭐ ${s.xp} XP &nbsp; • &nbsp; 💎 ${s.crystals} Kristal &nbsp; • &nbsp; 🎯 ${s.score}/20 soal benar</div><div class="actions"><button class="btn gold" onclick="${last?"reflection()":"worldMap()"}">${last?"🪞 Refleksi Akhir":"🗺️ Lanjut ke Map Berikutnya"}</button></div></section>`)}
+function reflection(){shell(`<section class="reflection"><h2>🪞 Refleksi Petualangan</h2><p>Tuliskan jawabanmu untuk membantu menguatkan pembelajaran.</p><label><b>1. Apa hal baru yang kamu pelajari?</b><textarea id="r1"></textarea></label><label><b>2. Perubahan wujud apa yang paling mudah kamu pahami?</b><textarea id="r2"></textarea></label><label><b>3. Apa perbedaan perubahan fisika dan kimia?</b><textarea id="r3"></textarea></label><label><b>4. Contoh perubahan zat apa yang kamu temukan dalam kehidupan sehari-hari?</b><textarea id="r4"></textarea></label><div class="actions"><button class="btn gold" onclick="finish()">👑 Selesaikan Petualangan</button></div></section>`)}
+function finish(){shell(`<section class="reward"><div class="badge">👑</div><h2>SELAMAT, AHLI PERUBAHAN WUJUD ZAT!</h2><p>Kamu telah menyelesaikan seluruh 5 map dan 20 tantangan.</p><div class="grid"><div class="card"><h3>⭐ XP</h3><b style="font-size:30px">${s.xp}</b></div><div class="card"><h3>💎 Kristal</h3><b style="font-size:30px">${s.crystals}</b></div><div class="card"><h3>🏅 Map</h3><b style="font-size:30px">5/5</b></div><div class="card"><h3>🎯 Soal</h3><b style="font-size:30px">${s.score}/20</b></div></div><div class="quote" style="margin-top:18px">🏆 <b>Gelar:</b> Mahkota Ahli Perubahan Wujud Zat</div><div class="actions"><button class="btn gold" onclick="worldMap()">🗺️ Lihat Peta</button><button class="btn dark" onclick="resetGame()">🔄 Main Lagi</button></div></section>`)}
+function resetGame(){if(confirm("Apakah kamu yakin ingin mengulang seluruh permainan?")){s={screen:"home",map:0,q:0,score:0,xp:0,crystals:0,done:Array(5).fill(false),wrong:false};save();home()}}
+load();home();
+</script>
+</body>
+</html>
